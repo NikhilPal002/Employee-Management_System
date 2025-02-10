@@ -18,6 +18,8 @@ namespace Employee_management.mappings
             CreateMap<CheckOutDto, Attendance>().ReverseMap();
             CreateMap<Payroll, PayrollDto>().ReverseMap();
             CreateMap<GeneratePayrollDto, Payroll>().ReverseMap();
+            CreateMap<EmployeeLeaveBalance, LeaveBalanceDto>().ReverseMap();
+            CreateMap<UpdateLeaveBalanceDto, EmployeeLeaveBalance>().ReverseMap();
         }
     }
 }

@@ -6,6 +6,8 @@ namespace Employee_management.Repositories
     {
         Task<EmployeeLeaveBalance> GetLeaveBalanceAsync(int employeeId);
 
-        Task UpdateLeaveBalanceAsync(int employeeId, int usedLeaves);
+        Task<bool> UpdateLeaveBalanceAsync(EmployeeLeaveBalance leaveBalance);
+
+        Task<bool> ResetLeaveBalanceAsync(int employeeId);
     }
 }

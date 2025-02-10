@@ -20,16 +20,23 @@ namespace Employee_management.Repositories
                 .FirstOrDefaultAsync(lb => lb.EmployeeID == employeeId);
         }
 
-        public async Task UpdateLeaveBalanceAsync(int employeeId, int usedLeaves)
+        public async Task<bool> ResetLeaveBalanceAsync(int employeeId)
         {
             var leaveBalance = await _context.EmployeeLeaveBalances
                 .FirstOrDefaultAsync(lb => lb.EmployeeID == employeeId);
 
-            if (leaveBalance != null)
-            {
-                leaveBalance.UsedPaidLeaves += usedLeaves;
-                await _context.SaveChangesAsync();
-            }
+            if (leaveBalance == null) return false;
+
+            leaveBalance.UsedPaidLeaves = 0;
+            await _context.SaveChangesAsync();
+            return true;
         }
+
+        public async Task<bool> UpdateLeaveBalanceAsync(EmployeeLeaveBalance leaveBalance)
+        {
+            _context.EmployeeLeaveBalances.Update(leaveBalance);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
     }
 }
