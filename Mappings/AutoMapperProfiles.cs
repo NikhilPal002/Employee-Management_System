@@ -13,6 +13,9 @@ namespace Employee_management.mappings
             CreateMap<AddLeaveDto, Leave>().ReverseMap();
             CreateMap<UpdateLeaveDto, Leave>().ReverseMap();
             CreateMap<UpdateLeaveStatusDto, Leave>().ReverseMap();
+            CreateMap<Attendance, AttendanceDto>().ReverseMap();
+            CreateMap<CheckInDto, Attendance>().ReverseMap();
+            CreateMap<CheckOutDto, Attendance>().ReverseMap();
         }
     }
 }
