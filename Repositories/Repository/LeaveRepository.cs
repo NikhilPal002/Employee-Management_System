@@ -34,7 +34,18 @@ namespace Employee_management.Repositories
             var leave = await _context.Leaves.FirstOrDefaultAsync(l => l.LeaveID == id);
             if (leave == null)
             {
-                throw new Exception("The leave id not found");
+                throw new Exception("The leave ID not found");
+            }
+
+            int leaveDays = (leave.EndDate - leave.StartDate).Days + 1;
+
+            var leaveBalance = await _context.EmployeeLeaveBalances
+        .FirstOrDefaultAsync(lb => lb.EmployeeID == leave.EmployeeID);
+
+            if (leaveBalance != null)
+            {
+                leaveBalance.UsedPaidLeaves += leaveDays; // Update the used leaves
+                await _context.SaveChangesAsync();
             }
 
             leave.Status = "Approved";
@@ -92,9 +103,28 @@ namespace Employee_management.Repositories
             if (leave == null || leave.Status != "Pending")
                 return false;
 
+            if (request.Status == "Rejected")
+            {
+                leave.Status = "Rejected";
+                await _context.SaveChangesAsync();
+                return true;
+            }
+
+            if (request.Status == "Approved")
+            {
+                var leaveBalance = await _context.EmployeeLeaveBalances
+                    .FirstOrDefaultAsync(lb => lb.EmployeeID == leave.EmployeeID);
+
+                if (leaveBalance != null)
+                {
+                    int leaveDays = (leave.EndDate - leave.StartDate).Days + 1;
+                    leaveBalance.UsedPaidLeaves += leaveDays;
+                    await _context.SaveChangesAsync();
+                }
+            }
+
             leave.Status = request.Status;
             leave.ApprovedBy = request.ApprovedBy;
-
             await _context.SaveChangesAsync();
 
             return true;

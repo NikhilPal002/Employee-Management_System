@@ -28,6 +28,18 @@ namespace Employee_management.Repositories
 
             _context.Employees.Add(employee);
             await _context.SaveChangesAsync();
+
+             // 🔹 Add Leave Balance Entry
+            var leaveBalance = new EmployeeLeaveBalance
+            {
+                EmployeeID = employee.EmployeeID,
+                TotalPaidLeaves = 22,
+                UsedPaidLeaves = 0
+            };
+
+            _context.EmployeeLeaveBalances.Add(leaveBalance);
+            await _context.SaveChangesAsync();
+
             return employee;
         }
 
@@ -39,6 +51,21 @@ namespace Employee_management.Repositories
             if (existingEmployee == null)
             {
                 return null;
+            }
+
+            // 🔹 Remove Employee Leaves
+            var employeeLeaves = _context.Leaves.Where(l => l.EmployeeID == id);
+            _context.Leaves.RemoveRange(employeeLeaves);
+
+            // 🔹 Remove Employee Payroll Records
+            var payrollRecords = _context.Payrolls.Where(p => p.EmployeeID == id);
+            _context.Payrolls.RemoveRange(payrollRecords);
+
+            // 🔹 Remove Employee Leave Balance
+            var leaveBalance = _context.EmployeeLeaveBalances.FirstOrDefault(lb => lb.EmployeeID == id);
+            if (leaveBalance != null)
+            {
+                _context.EmployeeLeaveBalances.Remove(leaveBalance);
             }
 
             _context.Employees.Remove(existingEmployee);

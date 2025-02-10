@@ -35,14 +35,21 @@ namespace Employee_management.Repositories
             .ToListAsync();
 
             int totalLeaveDays = leaveRecords.Sum(l => (l.EndDate - l.StartDate).Days + 1);
-            int paidLeaveDays = 2; // Example: Assuming 2 paid leaves are allowed
-            int unpaidLeaveDays = Math.Max(totalLeaveDays - paidLeaveDays, 0);
+
+            // Get Employee Leave Balance
+            var leaveBalance = await _context.EmployeeLeaveBalances
+                .FirstOrDefaultAsync(lb => lb.EmployeeID == request.EmployeeID);
+
+            int availablePaidLeaves = leaveBalance?.PendingPaidLeaves ?? 22;
+            int unpaidLeaveDays = Math.Max(totalLeaveDays - availablePaidLeaves, 0);
+
+
 
             int totalWorkingDays = 22; // Adjust based on company policy
-        decimal perDaySalary = employee.Salary / totalWorkingDays;
-        decimal unpaidLeaveDeduction = unpaidLeaveDays * perDaySalary;
+            decimal perDaySalary = employee.Salary / totalWorkingDays;
+            decimal unpaidLeaveDeduction = unpaidLeaveDays * perDaySalary;
 
-            decimal deductions =  request.Deductions + unpaidLeaveDeduction;
+            decimal deductions = request.Deductions + unpaidLeaveDeduction;
             decimal netSalary = employee.Salary - deductions;
 
             var payroll = new Payroll
