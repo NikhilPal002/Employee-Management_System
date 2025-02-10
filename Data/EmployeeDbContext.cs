@@ -15,6 +15,8 @@ namespace Employee_management.data
         public DbSet<Attendance> Attendance { get; set; }
         public DbSet<Payroll> Payrolls { get; set; }
 
+        public DbSet<EmployeeLeaveBalance> EmployeeLeaveBalances { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,6 +28,11 @@ namespace Employee_management.data
             );
 
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<EmployeeLeaveBalance>()
+                .HasOne(e => e.Employee)
+                .WithOne() // Assuming one leave balance per employee
+                .HasForeignKey<EmployeeLeaveBalance>(e => e.EmployeeID);
         }
 
 
