@@ -9,6 +9,10 @@ namespace Employee_management.mappings
         {
             CreateMap<Employee, EmployeeDto>().ReverseMap();
             CreateMap<AddUpdateEmployeeDto, Employee>().ReverseMap();
+            CreateMap<Leave, LeaveDto>().ReverseMap();
+            CreateMap<AddLeaveDto, Leave>().ReverseMap();
+            CreateMap<UpdateLeaveDto, Leave>().ReverseMap();
+            CreateMap<UpdateLeaveStatusDto, Leave>().ReverseMap();
         }
     }
 }

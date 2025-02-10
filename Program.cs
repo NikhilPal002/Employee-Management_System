@@ -10,6 +10,7 @@ builder.Services.AddDbContext<EmployeeDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
 
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<ILeaveRepository, LeaveRepository>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 // Add services to the container.
