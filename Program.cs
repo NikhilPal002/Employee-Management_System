@@ -14,6 +14,8 @@ builder.Services.AddScoped<ILeaveRepository, LeaveRepository>();
 builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
 builder.Services.AddScoped<IPayrollRepository, PayrollRepository>();
 builder.Services.AddScoped<ILeaveBalanceRepository, LeaveBalanceRepository>();
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
